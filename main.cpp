@@ -92,6 +92,7 @@ int main(int argc, char **argv)
 
     glutTimerFunc(0, timer, 0);
 
+    glutFullScreen();
     glutMainLoop();
     return 0;
 }
