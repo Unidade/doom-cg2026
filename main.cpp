@@ -31,8 +31,8 @@ void display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    float radYaw = yaw * M_PI / 180.0f;
-    float radPitch = pitch * M_PI / 180.0f;
+    float radYaw = static_cast<float>(yaw * M_PI / 180.0);
+    float radPitch = static_cast<float>(pitch * M_PI / 180.0);
 
     float dirX = cosf(radPitch) * sinf(radYaw);
     float dirY = sinf(radPitch);
@@ -84,6 +84,8 @@ void reshape(int w, int h)
 
 void timer(int v)
 {
+    (void)v; // parâmetro não usado, mas necessário para callback do GLUT
+    
     anguloPiramide += 1.5f;
     if (anguloPiramide >= 360.0f)
         anguloPiramide -= 360.0f;
