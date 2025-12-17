@@ -43,3 +43,12 @@ void altFullScreen()
         fullScreen = false;
     }
 }
+
+void setCamera(float x, float y, float z, float newYaw, float newPitch)
+{
+    camX = x;
+    camY = y;
+    camZ = z;
+    yaw = newYaw;
+    pitch = newPitch;
+}

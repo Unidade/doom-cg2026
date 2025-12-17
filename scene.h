@@ -30,5 +30,6 @@ void atualizaCentroJanela(int w, int h);
 void desenhaChao(void);
 void desenhaTorresELosangos(void);
 void desenhaPiramideDegraus(void);
+void setCamera(float x, float y, float z, float newYaw, float newPitch);
 
 #endif

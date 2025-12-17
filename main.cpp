@@ -6,6 +6,11 @@
 #include "input.h"
 #include "texture.h"
 #include "shader.h"
+#include "utils/maploader.h"
+#include "drawlevel.h"
+#include "utils/levelmetrics.h"
+
+static MapLoader gMap;
 
 float anguloPiramide = 0.0f;
 float anguloEsfera = 0.0f;
@@ -16,11 +21,10 @@ int frameCount = 0;
 int previousTime = 0;
 
 GLuint texChao;
-GLuint texTorre;
-GLuint texDegrau;
-GLuint texEsfera;
+GLuint texParede;
+GLuint texSangue;
 GLuint texLava;
-GLuint progEsfera;
+GLuint progSangue;
 GLuint progLava;
 
 void display()
@@ -41,9 +45,7 @@ void display()
         camX + dirX, camY + dirY, camZ + dirZ,
         0.0f, 1.0f, 0.0f);
 
-    desenhaChao();
-    desenhaTorresELosangos();
-    desenhaPiramideDegraus();
+    drawLevel(gMap);
 
     glutSwapBuffers();
 
@@ -118,13 +120,12 @@ int main(int argc, char **argv)
 
     // carregando texturas
     texChao = carregaTextura("assets/181.png");
-    texTorre = carregaTextura("assets/091.png");
-    texDegrau = carregaTextura("assets/190.png");
-    texEsfera = carregaTextura("assets/016.png");
+    texParede = carregaTextura("assets/091.png");
+    texSangue = carregaTextura("assets/016.png");
     texLava = carregaTextura("assets/179.png");
 
     // cria o shader
-    progEsfera = criaShader("shaders/blood.vert", "shaders/blood.frag");
+    progSangue = criaShader("shaders/blood.vert", "shaders/blood.frag");
     progLava = criaShader("shaders/lava.vert", "shaders/lava.frag");
 
     glClearColor(0.05f, 0.05f, 0.1f, 1.0f);
@@ -138,6 +139,11 @@ int main(int argc, char **argv)
     glutSetCursor(GLUT_CURSOR_NONE); // esconde o cursor
 
     glutTimerFunc(0, timer, 0);
+
+    gMap.load("maps/map1.txt");
+    LevelMetrics m = LevelMetrics::fromMap(gMap, 4.0f); 
+    m.spawnPos(gMap, camX, camZ);
+    camY = 1.5f;
 
     glutMainLoop();
     return 0;
