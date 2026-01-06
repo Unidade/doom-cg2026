@@ -28,12 +28,32 @@ float tempo = 0.0f;
 static GameAssets gAssets;
 Level gLevel;
 
+static void setupIndoorLightOnce()
+{
+    glEnable(GL_LIGHT1);
+
+    // Lâmpada branca azulada (fria)
+    GLfloat lampDiffuse[] = {1.7f, 1.7f, 1.8f, 1.0f};
+
+    GLfloat lampSpecular[] = {0, 0, 0, 1.0f};
+
+    // Ambient frio 
+    GLfloat lampAmbient[] = {0.98f, 0.99f, 1.41f, 1.0f};
+
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, lampDiffuse);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, lampSpecular);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, lampAmbient);
+
+    // Atenuação
+    glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.6f);
+    glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.06f);
+    glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.02f);
+
+    glDisable(GL_LIGHT1);
+}
+
 static void setupSunLightOnce()
 {
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
-
-    glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
     // Ambiente global
@@ -59,11 +79,13 @@ static void setSunDirectionEachFrame()
 
 bool gameInit(const char *mapPath)
 {
+    glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glClearColor(0.05f, 0.05f, 0.1f, 1.0f);
 
     setupSunLightOnce();
+    setupIndoorLightOnce();
 
     if (!loadAssets(gAssets))
         return false;
